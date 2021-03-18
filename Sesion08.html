@@ -41,6 +41,8 @@
         var upArrow = false;
         var downArrow = false;
         var object;
+        var object2;
+        var object3;
         init();
         animate();
 
@@ -124,7 +126,7 @@
             //En este caso vamos a crear la geomteria de un cubo
 
 
-            var geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+            var geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
             for (var i = 0; i < geometry.faces.length; i++) {
                 switch (i)
 
@@ -157,7 +159,7 @@
             }
 
 
-            var geometry2 = new THREE.BoxGeometry(2.5, 2.5, 2.5);
+            var geometry2 = new THREE.BoxGeometry(2.0, 2.0, 2.0);
             for (var i = 0; i < geometry2.faces.length; i++) {
                 switch (i)
 
@@ -188,21 +190,72 @@
                         break;
                 }
             }
+            
+            
+            
+            var geometry3 = new THREE.BoxGeometry(4.0, 4.0, 4.0);
+            for (var i = 0; i < geometry3.faces.length; i++) {
+                switch (i)
+
+                {
+                    case 0:
+                    case 1:
+                        geometry3.faces[i].color = colorRd;
+                        break;
+                    case 2:
+                    case 3:
+                        geometry3.faces[i].color = colorRd;
+                        break;
+                    case 4:
+                    case 5:
+                        geometry3.faces[i].color = colorGd;
+                        break;
+                    case 6:
+                    case 7:
+                        geometry3.faces[i].color = colorGd;
+                        break;
+                    case 8:
+                    case 9:
+                        geometry3.faces[i].color = colorBd;
+                        break;
+                    case 10:
+                    case 11:
+                        geometry3.faces[i].color = colorBd;
+                        break;
+                }
+            }
+            
 
 
             //CREAR EL MATERIAL
 
 
             var material = new THREE.MeshBasicMaterial({
-                color: color1,
+                color: color2,
                 vertexColors: THREE.FaceColors
+            });
+            
+            var materiale = new THREE.MeshBasicMaterial({
+                color: color2,
+                transparent: true,
+                wireframe: true
+                
+            });
+            
+            
+            var materiales = new THREE.MeshBasicMaterial({
+                color: color2,
+                transparent: true,
+                wireframe: true
+                
             });
 
             //CREAR LOS OBJETOS
 
 
             object = new THREE.Mesh(geometry, material);
-            //object = new THREE.Mesh(geometry2, material);
+            object2 = new THREE.Mesh(geometry2, materiale);
+            object3 = new THREE.Mesh(geometry3, materiales);
 
             //AGREGAR A LA ESCENA
             //En este apartado agregamos la escena
@@ -212,6 +265,8 @@
             scene.add(arrowY);
             scene.add(arrowZ);
             scene.add(object);
+            scene.add(object2);
+            scene.add(object3);
 
             //MOVER LA CÁMARA
 
@@ -221,6 +276,7 @@
             camera.position.y = 8;
             camera.position.z = 15;
             camera.lookAt(origin);
+
         }
 
         function animate()
@@ -236,20 +292,6 @@
         {
 
             var dtime = Date.now() - startTime;
-            var tx = 0,
-                ty = 0,
-                tz = 0;
-            if (upArrow)
-
-            {
-                tx = 1;
-            }
-
-            if (downArrow)
-
-            {
-                tx = -1;
-            }
 
             camera.lookAt(0, 0, 0);
             renderer.render(scene, camera);
