@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SESION08</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #info {
+            position: absolute;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            color: cadetblue;
+        }
+
+        h2 {
+            color: beige;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <h2>EJERCICIO EN CLASE(SESION 08)</h2>
+
+        Universidad Militar Nueva granada<br />
+        Hector Murcia <br />
+
+
+    </div>
+    <script src="js/three.min.js"></script>
+    <script>
+        var scene, aspect, camera, renderer;
+        var startTime = Date.now();
+        var upArrow = false;
+        var downArrow = false;
+        var object;
+        var object2;
+        var object3;
+        init();
+        animate();
+
+        function init()
+
+        {
+
+            //El siguiente codigo fue con ayuda de la siguiente página : https://github.com/avilagab/CG-2020-2, al igual que la pagina de three.js https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene, al igual que el color picker de google, y la pagina http://keycode.info/, la cual me ayudo para los key de teclado o los atajos de teclado, para saber su codigo dependiendo de la letra, el github es de un repositorio del señor Gabriel Avila, el cual tiene un gran material de apoyo, de igual manera que la construccion de la matriz de traslación, me apoye y verifique que estuviera bien gracias a los apuntes del semestre pasado de introducción a la computación.
+
+            //ESCENA
+
+            scene = new THREE.Scene();
+
+            //ASPECTO
+
+            aspect = window.innerWidth / window.innerHeight;
+
+            //CAMARA
+
+
+            camera = new THREE.PerspectiveCamera(30, aspect, 0.1, 1000);
+
+            //RENDER
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            //ELEMENTOS DE LA ESCENA
+
+            var size = 14;
+            var arrowSize = 2;
+            var divisions = size;
+            var origin = new THREE.Vector3(0, 0, 0);
+            var x = new THREE.Vector3(1, 0, 0);
+            var y = new THREE.Vector3(0, 1, 0);
+            var z = new THREE.Vector3(0, 0, 1);
+
+            //COLOR DE LAS GRILLAS
+
+            var color1 = new THREE.Color("rgb(255, 255, 255)"); //grillas color blanco
+            var color2 = new THREE.Color("rgb(255, 255, 255)"); //grillas color blanc
+            var color3 = new THREE.Color("rgb(56, 222, 255)"); //color para el cubo o la geometria 2 
+            var color4 = new THREE.Color("rgb(196, 247, 151)"); //color para el cubo o la geometria 3
+
+            //COLOR DE LOS EJES
+
+            var colorB = new THREE.Color("rgb(255, 56, 56)"); //color rojo eje x
+            var colorV = new THREE.Color("rgb(56, 255, 112)"); //color verde eje y
+            var colorO = new THREE.Color("rgb(56, 202, 255)"); //color azul eje z
+
+            //COLOR DE LAS CARAS
+
+            var colorRd = new THREE.Color("rgb(255, 212, 212)"); //cara lateral rojo
+            var colorGd = new THREE.Color("rgb(212, 255, 226)"); //cara superior verde
+            var colorBd = new THREE.Color("rgb(212, 238, 255)"); //cara frontal azul
+
+            //CREAR GRILLAS PARA EL ESCENARIO
+
+
+            var axesHelper = new THREE.AxesHelper(size);
+            var gridHelperXY = new THREE.GridHelper(size, divisions, color1, color1); //subimos el color de las grillas
+            var gridHelperXZ = new THREE.GridHelper(size, divisions, color2, color2); //subimos el color de las grillas
+            var gridHelperYZ = new THREE.GridHelper(size, divisions, color2, color2); //subimos el color de las grillas
+
+            //ROTAR PARA QUE QUEDEN EN EL ESPACIO ADECUADO
+
+
+            gridHelperXY.rotateOnWorldAxis(x, THREE.Math.degToRad(90));
+            gridHelperXZ.rotateOnWorldAxis(y, THREE.Math.degToRad(90));
+            gridHelperYZ.rotateOnWorldAxis(z, THREE.Math.degToRad(90));
+
+            //CREAR LAS FLECHAS QUE INDICAN LOS EJES (X,Y,Z) DE COORDENADAS 3D
+
+            //En este caso usamos los colores que definimos en la parte de elementos escena para identificar los ejes que se muestran en la grilla
+
+            var arrowX = new THREE.ArrowHelper(x, origin, arrowSize, colorB); //construimos la flecha del eje x color aguamarina
+            var arrowY = new THREE.ArrowHelper(y, origin, arrowSize, colorV); //construimos la flecha del eje y color morado
+            var arrowZ = new THREE.ArrowHelper(z, origin, arrowSize, colorO); //construimos la flecha del eje z color amarillo
+
+            //CREAR LA GEOMETRÍA
+
+            //En este caso vamos a crear la geomteria de un cubo
+
+
+            //Esta es la geometria para el cubo de colores 
+            var geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+            for (var i = 0; i < geometry.faces.length; i++) {
+                switch (i)
+
+                {
+                    case 0:
+                    case 1:
+                        geometry.faces[i].color = colorRd;
+                        break;
+                    case 2:
+                    case 3:
+                        geometry.faces[i].color = colorRd;
+                        break;
+                    case 4:
+                    case 5:
+                        geometry.faces[i].color = colorGd;
+                        break;
+                    case 6:
+                    case 7:
+                        geometry.faces[i].color = colorGd;
+                        break;
+                    case 8:
+                    case 9:
+                        geometry.faces[i].color = colorBd;
+                        break;
+                    case 10:
+                    case 11:
+                        geometry.faces[i].color = colorBd;
+                        break;
+                }
+            }
+
+            //Esta es la geometria para el cubo azul
+
+            var geometry2 = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+            for (var i = 0; i < geometry2.faces.length; i++) {
+                switch (i)
+
+                {
+                    case 0:
+                    case 1:
+                        geometry2.faces[i].color = colorRd;
+                        break;
+                    case 2:
+                    case 3:
+                        geometry2.faces[i].color = colorRd;
+                        break;
+                    case 4:
+                    case 5:
+                        geometry2.faces[i].color = colorGd;
+                        break;
+                    case 6:
+                    case 7:
+                        geometry2.faces[i].color = colorGd;
+                        break;
+                    case 8:
+                    case 9:
+                        geometry2.faces[i].color = colorBd;
+                        break;
+                    case 10:
+                    case 11:
+                        geometry2.faces[i].color = colorBd;
+                        break;
+                }
+            }
+
+            //Esta es la geometria para el cubo verde 
+
+            var geometry3 = new THREE.BoxGeometry(2.0, 2.0, 2.0);
+            for (var i = 0; i < geometry3.faces.length; i++) {
+                switch (i)
+
+                {
+                    case 0:
+                    case 1:
+                        geometry3.faces[i].color = colorRd;
+                        break;
+                    case 2:
+                    case 3:
+                        geometry3.faces[i].color = colorRd;
+                        break;
+                    case 4:
+                    case 5:
+                        geometry3.faces[i].color = colorGd;
+                        break;
+                    case 6:
+                    case 7:
+                        geometry3.faces[i].color = colorGd;
+                        break;
+                    case 8:
+                    case 9:
+                        geometry3.faces[i].color = colorBd;
+                        break;
+                    case 10:
+                    case 11:
+                        geometry3.faces[i].color = colorBd;
+                        break;
+                }
+            }
+
+
+
+            //CREAR EL MATERIAL
+
+
+            var material = new THREE.MeshBasicMaterial({
+                color: color1,
+                vertexColors: THREE.FaceColors
+            });
+
+            var materiale = new THREE.MeshBasicMaterial({
+                color: color3,
+                transparent: true,
+                wireframe: true
+
+            });
+
+
+            var materiales = new THREE.MeshBasicMaterial({
+                color: color4,
+                transparent: true,
+                wireframe: true
+
+            });
+
+            //CREAR LOS OBJETOS
+
+
+            object = new THREE.Mesh(geometry, material);
+            object2 = new THREE.Mesh(geometry2, materiale);
+            object3 = new THREE.Mesh(geometry3, materiales);
+
+            //AGREGAR A LA ESCENA
+            //En este apartado agregamos la escena
+
+            scene.add(gridHelperXZ);
+            scene.add(arrowX);
+            scene.add(arrowY);
+            scene.add(arrowZ);
+            scene.add(object);
+            scene.add(object2);
+            scene.add(object3);
+
+            //MOVER LA CÁMARA
+
+            //En este apartado ubicamos la cámara en las posiciones que querramos, en este caso centré la grilla para que se alcance a ver toda la grilla y se vea el funcionamiento de la traslación del cubo
+
+            camera.position.x = 4;
+            camera.position.y = 8;
+            camera.position.z = 17;
+            camera.lookAt(origin);
+
+            //Matriz de traslación para el cubo de colores  
+            var matrizT = new THREE.Matrix4();
+
+            matrizT.set(1, 0, 0, 0,
+                0, 1, 0, 2.9,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+
+            //Matriz de traslación para el cubo azul
+            var matrizT1 = new THREE.Matrix4();
+
+            matrizT1.set(1, 0, 0, 0,
+                0, 1, 0, 1.7,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+
+            geometry.applyMatrix(matrizT);
+            geometry.elementNeedUpdate = true;
+            geometry2.applyMatrix(matrizT1);
+            geometry2.elementNeedUpdate = true;
+
+        }
+
+        function animate()
+
+        {
+
+            render();
+            requestAnimationFrame(animate);
+        }
+
+        function render()
+
+        {
+
+            var dtime = Date.now() - startTime;
+
+            camera.lookAt(0, 0, 0);
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+
+</html>
