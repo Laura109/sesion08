@@ -129,7 +129,7 @@
 
 
             //Esta es la geometria para el cubo de colores 
-            var geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+            var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
             for (var i = 0; i < geometry.faces.length; i++) {
                 switch (i)
 
@@ -163,7 +163,7 @@
 
             //Esta es la geometria para el cubo azul
 
-            var geometry2 = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+            var geometry2 = new THREE.BoxGeometry(1.0, 1.0, 1.0);
             for (var i = 0; i < geometry2.faces.length; i++) {
                 switch (i)
 
@@ -232,13 +232,16 @@
 
 
             //CREAR EL MATERIAL
-
-
+            
+            
+            
+            //Material para el cubo de colores
             var material = new THREE.MeshBasicMaterial({
                 color: color1,
                 vertexColors: THREE.FaceColors
             });
 
+            //Material para el cubo azul
             var materiale = new THREE.MeshBasicMaterial({
                 color: color3,
                 transparent: true,
@@ -246,7 +249,7 @@
 
             });
 
-
+            //Material para el cubo verde
             var materiales = new THREE.MeshBasicMaterial({
                 color: color4,
                 transparent: true,
@@ -257,9 +260,9 @@
             //CREAR LOS OBJETOS
 
 
-            object = new THREE.Mesh(geometry, material);
-            object2 = new THREE.Mesh(geometry2, materiale);
-            object3 = new THREE.Mesh(geometry3, materiales);
+            object = new THREE.Mesh(geometry, material);//cubo de colores
+            object2 = new THREE.Mesh(geometry2, materiale);//cubo azul
+            object3 = new THREE.Mesh(geometry3, materiales);//cubo verde
 
             //AGREGAR A LA ESCENA
             //En este apartado agregamos la escena
@@ -268,13 +271,13 @@
             scene.add(arrowX);
             scene.add(arrowY);
             scene.add(arrowZ);
-            scene.add(object);
-            scene.add(object2);
-            scene.add(object3);
+            scene.add(object);//escena para el cubo de colores
+            scene.add(object2);//escena para el cubo azul
+            scene.add(object3);//escena para el cubo verde 
 
             //MOVER LA CÁMARA
 
-            //En este apartado ubicamos la cámara en las posiciones que querramos, en este caso centré la grilla para que se alcance a ver toda la grilla y se vea el funcionamiento de la traslación del cubo
+            //En este apartado ubicamos la cámara en las posiciones que querramos, en este intente ubicarlo de tal manera que se pareciera al del libro
 
             camera.position.x = 4;
             camera.position.y = 8;
@@ -285,7 +288,7 @@
             var matrizT = new THREE.Matrix4();
 
             matrizT.set(1, 0, 0, 0,
-                0, 1, 0, 2.9,
+                0, 1, 0, 2.2,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
 
@@ -293,7 +296,7 @@
             var matrizT1 = new THREE.Matrix4();
 
             matrizT1.set(1, 0, 0, 0,
-                0, 1, 0, 1.7,
+                0, 1, 0, 1.5,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
 
